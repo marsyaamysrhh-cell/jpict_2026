@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Statistik JPICT Sarawak</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #ffffff; 
+            color: #1e293b; 
+            overflow-x: hidden;
+        }
+
+        .gold-header {
+            font-family: 'Cinzel', serif;
+            background: linear-gradient(135deg, #BF953F 0%, #B38728 50%, #AA771C 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0px 2px 10px rgba(191, 149, 63, 0.1);
+        }
+
+        .gold-border {
+            border: 1px solid rgba(212, 175, 55, 0.4);
+        }
+
+        .gold-border-glow:focus {
+            border-color: #d4af37;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+        }
+
+        .bg-card {
+            background: #f8fafc; 
+            border: 1px solid rgba(212, 175, 55, 0.25);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .bg-card:hover {
+            border-color: rgba(212, 175, 55, 0.6);
+        }
+
+        .gold-accent {
+            color: #9a7212;
+        }
+
+        .btn-gold {
+            background: linear-gradient(135deg, #c59b27, #9a7212);
+            color: #ffffff;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+
+        .btn-gold:hover {
+            background: linear-gradient(135deg, #e5b839, #b88a18);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .custom-checkbox {
+            accent-color: #d4af37;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #d4af37;
+        }
+
+        .page-transition {
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body class="min-h-screen pb-10">
+
+    <!-- LANDING PAGE -->
+    <div id="landingPage" class="fixed inset-0 z-50 bg-[#0b0d11] text-[#e2e8f0] flex flex-col justify-between items-center p-6 text-center page-transition overflow-y-auto">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(212,175,55,0.08)_0%,_transparent_70%)] pointer-events-none"></div>
+        <div></div>
+
+        <div class="max-w-3xl mx-auto flex flex-col items-center z-10 my-auto py-10">
+            <div class="mb-6 relative group">
+                <div class="absolute -inset-1 bg-gradient-to-r from-[#BF953F] to-[#AA771C] rounded-full blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
+                <img src="logo.png" alt="Logo JPNS" class="relative w-36 h-36 md:w-44 md:h-44 object-contain drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)]">
+            </div>
+
+            <h1 class="gold-header text-3xl md:text-5xl lg:text-6xl font-black uppercase tracking-wider mb-3 leading-tight">
+                JABATAN PENDIDIKAN NEGERI SARAWAK
+            </h1>
+            
+            <div class="h-1 w-32 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent my-4"></div>
+
+            <button onclick="enterDashboard()" class="btn-gold px-8 py-4 rounded-xl text-base md:text-lg font-bold tracking-wider uppercase flex items-center space-x-3 shadow-2xl cursor-pointer">
+                <span>MASUK MENU UTAMA</span>
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+
+        <div class="z-10 text-xs text-gray-500 uppercase tracking-widest py-4">
+            &copy; 2026 JABATAN PENDIDIKAN NEGERI SARAWAK. HAK CIPTA TERPELIHARA.
+        </div>
+    </div>
+
+
+    <!-- DASHBOARD PAGE -->
+    <div id="dashboardPage" class="hidden opacity-0 page-transition bg-white text-slate-800 min-h-screen">
+
+        <!-- Header Section -->
+        <header class="py-6 px-6 bg-gradient-to-b from-slate-100 to-white border-b border-amber-500/20 shadow-sm sticky top-0 z-40 backdrop-blur-md">
+            <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+                
+                <div class="flex items-center space-x-4">
+                    <img src="logo.png" alt="Logo JPNS" class="w-12 h-12 object-contain">
+                    <div class="text-left">
+                        <h1 class="gold-header text-xl md:text-2xl font-extrabold tracking-wider uppercase">
+                            JABATAN PENDIDIKAN NEGERI SARAWAK
+                        </h1>
+                        <p class="text-slate-500 text-xs tracking-widest uppercase font-medium">
+                            STATISTIK (JPICT) 2026
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-3">
+                    <button onclick="resetFilters()" class="btn-gold px-4 py-2 rounded-lg text-xs flex items-center space-x-2 shadow-sm">
+                        <i class="fa-solid fa-rotate-left"></i>
+                        <span>(Reset All)</span>
+                    </button>
+                    <button onclick="returnToLanding()" class="gold-border text-slate-700 hover:text-black px-4 py-2 rounded-lg text-xs flex items-center space-x-2 transition bg-white shadow-sm">
+                        <i class="fa-solid fa-house gold-accent"></i>
+                        <span>Laman Utama</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main class="max-w-7xl mx-auto px-4 md:px-6 mt-8">
+
+            <!-- Panel Filter Interaktif -->
+            <section class="bg-card rounded-2xl p-6 mb-8 shadow-md relative">
+                <div class="flex items-center justify-between mb-6 pb-3 border-b border-slate-200">
+                    <div class="flex items-center space-x-3">
+                        <i class="fa-solid fa-sliders gold-accent text-xl"></i>
+                        <h2 class="text-lg font-semibold text-slate-900 tracking-wide">Penapis Rekod Mengikut PPD, Sekolah & Peralatan</h2>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    
+                    <!-- 1. PPD DROPDOWN -->
+                    <div class="relative" id="dropdownPpdContainer">
+                        <label class="block text-xs uppercase font-semibold text-slate-500 mb-2">Pilihan PPD</label>
+                        <button id="ppdBtn" onclick="toggleDropdown('ppdMenu')" class="w-full bg-white text-slate-700 text-sm rounded-lg p-3 gold-border flex justify-between items-center text-left focus:outline-none shadow-sm">
+                            <span id="ppdBtnText" class="truncate">Semua PPD Dipilih</span>
+                            <i class="fa-solid fa-chevron-down text-xs gold-accent ml-2"></i>
+                        </button>
+
+                        <div id="ppdMenu" class="hidden absolute left-0 right-0 top-full mt-2 bg-white gold-border rounded-xl shadow-xl p-4 z-50">
+                            <input type="text" id="ppdSearch" oninput="filterList('ppd')" placeholder="Cari PPD..." class="w-full bg-slate-50 text-xs text-slate-800 p-2 rounded border border-slate-300 mb-3 focus:outline-none gold-border-glow">
+                            <div class="flex justify-between items-center pb-2 mb-2 border-b border-slate-200 text-xs">
+                                <button onclick="selectAll('ppd', true)" class="gold-accent hover:underline font-semibold">Pilih Semua</button>
+                                <button onclick="selectAll('ppd', false)" class="text-slate-500 hover:underline">Kosongkan</button>
+                            </div>
+                            <div id="ppdList" class="space-y-2 max-h-48 overflow-y-auto"></div>
+                        </div>
+                    </div>
+
+                    <!-- 2. SEKOLAH DROPDOWN -->
+                    <div class="relative" id="dropdownSekolahContainer">
+                        <label class="block text-xs uppercase font-semibold text-slate-500 mb-2">Pilihan Sekolah (Auto-ikut PPD)</label>
+                        <button id="sekolahBtn" onclick="toggleDropdown('sekolahMenu')" class="w-full bg-white text-slate-700 text-sm rounded-lg p-3 gold-border flex justify-between items-center text-left focus:outline-none shadow-sm">
+                            <span id="sekolahBtnText" class="truncate">Semua Sekolah Dipilih</span>
+                            <i class="fa-solid fa-chevron-down text-xs gold-accent ml-2"></i>
+                        </button>
+
+                        <div id="sekolahMenu" class="hidden absolute left-0 right-0 top-full mt-2 bg-white gold-border rounded-xl shadow-xl p-4 z-50">
+                            <input type="text" id="sekolahSearch" oninput="filterList('sekolah')" placeholder="Cari Sekolah..." class="w-full bg-slate-50 text-xs text-slate-800 p-2 rounded border border-slate-300 mb-3 focus:outline-none gold-border-glow">
+                            <div class="flex justify-between items-center pb-2 mb-2 border-b border-slate-200 text-xs">
+                                <button onclick="selectAll('sekolah', true)" class="gold-accent hover:underline font-semibold">Pilih Semua</button>
+                                <button onclick="selectAll('sekolah', false)" class="text-slate-500 hover:underline">Kosongkan</button>
+                            </div>
+                            <div id="sekolahList" class="space-y-2 max-h-48 overflow-y-auto"></div>
+                        </div>
+                    </div>
+
+                    <!-- 3. ALATAN DROPDOWN -->
+                    <div class="relative" id="dropdownAlatanContainer">
+                        <label class="block text-xs uppercase font-semibold text-slate-500 mb-2">Pilihan Peralatan</label>
+                        <button id="alatanBtn" onclick="toggleDropdown('alatanMenu')" class="w-full bg-white text-slate-700 text-sm rounded-lg p-3 gold-border flex justify-between items-center text-left focus:outline-none shadow-sm">
+                            <span id="alatanBtnText" class="truncate">Semua Peralatan Dipilih</span>
+                            <i class="fa-solid fa-chevron-down text-xs gold-accent ml-2"></i>
+                        </button>
+
+                        <div id="alatanMenu" class="hidden absolute left-0 right-0 top-full mt-2 bg-white gold-border rounded-xl shadow-xl p-4 z-50">
+                            <input type="text" id="alatanSearch" oninput="filterList('alatan')" placeholder="Cari Peralatan..." class="w-full bg-slate-50 text-xs text-slate-800 p-2 rounded border border-slate-300 mb-3 focus:outline-none gold-border-glow">
+                            <div class="flex justify-between items-center pb-2 mb-2 border-b border-slate-200 text-xs">
+                                <button onclick="selectAll('alatan', true)" class="gold-accent hover:underline font-semibold">Pilih Semua</button>
+                                <button onclick="selectAll('alatan', false)" class="text-slate-500 hover:underline">Kosongkan</button>
+                            </div>
+                            <div id="alatanList" class="space-y-2 max-h-48 overflow-y-auto"></div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- Dynamic KPI Cards -->
+            <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div class="bg-card p-6 rounded-xl shadow-sm border-l-4 border-[#d4af37]">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="text-xs uppercase font-bold text-slate-500">Jumlah Kelulusan (RM)</p>
+                            <h3 id="kpiJumlahKelulusan" class="text-2xl font-bold gold-accent mt-1">RM 0.00</h3>
+                        </div>
+                        <div class="p-3 bg-amber-500/10 rounded-lg">
+                            <i class="fa-solid fa-sack-dollar gold-accent text-2xl"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-card p-6 rounded-xl shadow-sm border-l-4 border-[#d4af37]">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="text-xs uppercase font-bold text-slate-500">Bil. Permohonan Diluluskan</p>
+                            <h3 id="kpiJumlahPermohonan" class="text-2xl font-bold text-slate-900 mt-1">0</h3>
+                        </div>
+                        <div class="p-3 bg-amber-500/10 rounded-lg">
+                            <i class="fa-solid fa-file-circle-check gold-accent text-2xl"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-card p-6 rounded-xl shadow-sm border-l-4 border-[#d4af37]">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="text-xs uppercase font-bold text-slate-500">Jumlah Kuantiti Peralatan</p>
+                            <h3 id="kpiJumlahKuantiti" class="text-2xl font-bold text-slate-900 mt-1">0 Unit</h3>
+                        </div>
+                        <div class="p-3 bg-amber-500/10 rounded-lg">
+                            <i class="fa-solid fa-boxes-stacked gold-accent text-2xl"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-card p-6 rounded-xl shadow-sm border-l-4 border-[#d4af37]">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="text-xs uppercase font-bold text-slate-500">PPD Dipilih</p>
+                            <h3 id="kpiJumlahPPD" class="text-2xl font-bold text-slate-900 mt-1">0</h3>
+                        </div>
+                        <div class="p-3 bg-amber-500/10 rounded-lg">
+                            <i class="fa-solid fa-building-columns gold-accent text-2xl"></i>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Visual Analytics Section -->
+            <section class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                <div class="bg-card p-6 rounded-2xl shadow-sm">
+                    <h3 class="text-base font-semibold text-slate-900 mb-4 flex items-center space-x-2">
+                        <i class="fa-solid fa-chart-bar gold-accent"></i>
+                        <span>Perbandingan Peruntukan PPD Dipilih (Klik Bar untuk Auto-Filter)</span>
+                    </h3>
+                    <div class="relative h-72">
+                        <canvas id="chartPPD"></canvas>
+                    </div>
+                </div>
+
+                <div class="bg-card p-6 rounded-2xl shadow-sm">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-base font-semibold text-slate-900 flex items-center space-x-2">
+                            <i class="fa-solid fa-chart-pie gold-accent"></i>
+                            <span>Agihan Jenis Peralatan Terpilih (Klik Carta untuk Auto-Filter)</span>
+                        </h3>
+                    </div>
+                    <div class="relative h-72 flex justify-center items-center">
+                        <canvas id="chartAlatan"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Data Table Section -->
+            <section class="bg-card rounded-2xl p-6 shadow-sm">
+                <div class="flex flex-col md:flex-row justify-between md:items-center mb-6 gap-4">
+                    <h3 class="text-lg font-semibold text-slate-900 flex items-center space-x-2">
+                        <i class="fa-solid fa-table-list gold-accent"></i>
+                        <span>Senarai Perincian Kelulusan JPICT Mengikut Penapis</span>
+                    </h3>
+                    <div class="text-xs text-slate-500">
+                        Menunjukkan <span id="recordCount" class="gold-accent font-bold">0</span> rekod
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto rounded-lg gold-border">
+                    <table class="w-full text-left text-xs text-slate-700">
+                        <thead class="bg-slate-100 text-slate-700 uppercase font-semibold border-b border-slate-200">
+                            <tr>
+                                <th class="p-3 text-center">Bil</th>
+                                <th class="p-3">PPD</th>
+                                <th class="p-3">Nama Sekolah</th>
+                                <th class="p-3">Tarikh Lulus</th>
+                                <th class="p-3">Peralatan</th>
+                                <th class="p-3 text-center">Kuantiti</th>
+                                <th class="p-3 text-right">Jumlah Kelulusan (RM)</th>
+                                <th class="p-3">Peruntukan</th>
+                                <th class="p-3">No. Rujukan Surat</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody" class="divide-y divide-slate-200 bg-white">
+                            <!-- Dynamic Rows -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+        const rawData = [{"ppd": "KUCHING", "sekolah": "SK GITA", "tarikh": "11/03/2026", "kelulusan": 2000.0, "peruntukan": "PCG-LPBT/LPK", "noRujukan": "SKGITA.300-2/1/2(02)", "alatan": "TERMINAL PENGIMBAS KEHADIRAN", "kuantiti": 1}, {"ppd": "KUCHING", "sekolah": "SMK BAKO", "tarikh": "11/03/2026", "kelulusan": 689.0, "peruntukan": "PCG-LPBT/LPK", "noRujukan": "SMKBAKO.300-2/1/2()", "alatan": "WIFI MESH", "kuantiti": 1}, {"ppd": "KUCHING", "sekolah": "SMK BAKO", "tarikh": "11/03/2026", "kelulusan": 1956.0, "peruntukan": "PCG-LPBT/LPK", "noRujukan": "SMKBAKO.300-2/1/2()", "alatan": "ACCESS POINT", "kuantiti": 4}, {"ppd": "KUCHING", "sekolah": "SMK BAKO", "tarikh": "11/03/2026", "kelulusan": 650.0, "peruntukan": "PCG-LPBT/LPK", "noRujukan": "SMKBAKO.300-2/1/2()", "alatan": "KABEL CAT6", "kuantiti": 1}, {"ppd": "KUCHING", "sekolah": "SMK BAKO", "tarikh": "11/03/2026", "kelulusan": 450.0, "peruntukan": "PCG-LPBT/LPK", "noRujukan": "SMKBAKO.300-2/1/2()", "alatan": "WIRE CONDIUT SPLIT", "kuantiti": 1}, {"ppd": "BETONG", "sekolah": "SMK BELADIN", "tarikh": "11/03/2026", "kelulusan": 47600.0, "peruntukan": "SEEP", "noRujukan": "SMKBBET.300-2/1/2(02)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "BETONG", "sekolah": "SMK PUSA", "tarikh": "11/03/2026", "kelulusan": 47600.0, "peruntukan": "SEEP", "noRujukan": "SMKPBET.300.2/24(03)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "SRI AMAN", "sekolah": "SMK MELUGU", "tarikh": "02/04/2026", "kelulusan": 47680.0, "peruntukan": "SEEP", "noRujukan": "SMKM.600-3/2/23()", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "SERIAN", "sekolah": "SMK TAEE", "tarikh": "02/04/2026", "kelulusan": 47400.0, "peruntukan": "SEEP", "noRujukan": "SMKTaee.600-5/1/19", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "BETONG", "sekolah": "SMK SARIBAS", "tarikh": "02/04/2026", "kelulusan": 47600.0, "peruntukan": "SEEP", "noRujukan": "SMKSDBET.300-2/2/4(04)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "LUBOK ANTU", "sekolah": "SMK ENGKILILI", "tarikh": "02/04/2026", "kelulusan": 47680.0, "peruntukan": "SEEP", "noRujukan": "SMKELA.600-5/1/24(14)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "SERIAN", "sekolah": "SMK SERIAN", "tarikh": "02/04/2026", "kelulusan": 47960.0, "peruntukan": "SEEP", "noRujukan": "SMKSERIAN.400-5/21(02)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "KUCHING", "sekolah": "SMK SERI SETIA", "tarikh": "02/04/2026", "kelulusan": 599.0, "peruntukan": "PCG-PSS", "noRujukan": "SMKSS.300-2/2/2(03)", "alatan": "PRINTER", "kuantiti": 1}, {"ppd": "KUCHING", "sekolah": "SMK SERI SETIA", "tarikh": "02/04/2026", "kelulusan": 3999.0, "peruntukan": "PCG-PSS", "noRujukan": "SMKSS.300-2/2/2(03)", "alatan": "KOMPUTER MEJA", "kuantiti": 1}, {"ppd": "SARATOK", "sekolah": "SMK KABONG", "tarikh": "02/04/2026", "kelulusan": 47960.0, "peruntukan": "SEEP", "noRujukan": "SMKKBG.300-2/1/2(01)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "SIBU", "sekolah": "SMK LUAR BANDAR NO.1 SIBU", "tarikh": "02/04/2026", "kelulusan": 47680.0, "peruntukan": "SEEP", "noRujukan": "SMKLBS.300-2/1/2(1)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "SAMARAHAN", "sekolah": "SMK SRI SAMARAHAN", "tarikh": "02/04/2026", "kelulusan": 23994.0, "peruntukan": "KPD PPD SAMARAHAN", "noRujukan": "PPDSAM.500-4/2/3", "alatan": "KOMPUTER MEJA", "kuantiti": 6}, {"ppd": "SIMUNJAN", "sekolah": "SMK SEBUYAU", "tarikh": "02/04/2026", "kelulusan": 47200.0, "peruntukan": "SEEP", "noRujukan": "SMKSBY.400-1/3/1()", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "BINTULU", "sekolah": "SMK KEMENA", "tarikh": "02/04/2026", "kelulusan": 47680.0, "peruntukan": "SEEP", "noRujukan": "SMKKEM.300-2/1/2()", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "MUKAH", "sekolah": "SMK MUKAH", "tarikh": "02/04/2026", "kelulusan": 47680.0, "peruntukan": "SEEP", "noRujukan": "SMKM.400-5/2/1(05)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "DARO", "sekolah": "SMK TOH PUAN DATUK PATINGGI HJH NORMAH", "tarikh": "02/04/2026", "kelulusan": 47960.0, "peruntukan": "SEEP", "noRujukan": "SMKND.300-2/1/2(27)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "DARO", "sekolah": "SMK BELAWAI", "tarikh": "02/04/2026", "kelulusan": 47960.0, "peruntukan": "SEEP", "noRujukan": "SMKB.300-2/1/2(07)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "SARATOK", "sekolah": "SMK BAHASA MALAYSIA SARATOK", "tarikh": "02/04/2026", "kelulusan": 47200.0, "peruntukan": "SEEP", "noRujukan": "SMKBMS.100-15/4/2(6)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "SRI AMAN", "sekolah": "SMK SIMANGGANG", "tarikh": "02/04/2026", "kelulusan": 47800.0, "peruntukan": "SEEP", "noRujukan": "SMKS.100-15/1/4()", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "MERADONG", "sekolah": "SMK MERADONG", "tarikh": "02/04/2026", "kelulusan": 47600.0, "peruntukan": "SEEP", "noRujukan": "SMKM.300-2/1/1/2(1)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "SUBIS", "sekolah": "SMK BAKONG", "tarikh": "02/04/2026", "kelulusan": 47960.0, "peruntukan": "SEEP", "noRujukan": "SMKBM.600-5/1/5(80)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "DALAT", "sekolah": "SK KAMPUNG KEBUAW", "tarikh": "27/04/2026", "kelulusan": 799.0, "peruntukan": "GTK-PRASEKOLAH", "noRujukan": "SKKK.300-2/1/2(01)", "alatan": "TABLET", "kuantiti": 1}, {"ppd": "DALAT", "sekolah": "SK KAMPUNG BALAN", "tarikh": "27/04/2026", "kelulusan": 799.0, "peruntukan": "GTK-PRASEKOLAH", "noRujukan": "SKBLAN.100-15/4/1()", "alatan": "TABLET", "kuantiti": 1}, {"ppd": "SONG", "sekolah": "SMK SONG", "tarikh": "27/04/2026", "kelulusan": 47960.0, "peruntukan": "SEEP", "noRujukan": "SMKS300-2/1/2(22)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "SRI AMAN", "sekolah": "SMK ST LUKE", "tarikh": "27/04/2026", "kelulusan": 47960.0, "peruntukan": "SEEP", "noRujukan": "SMKSL.700-4/1/1 JLD.1(15)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "SONG", "sekolah": "SMK SONG NO.2", "tarikh": "27/04/2026", "kelulusan": 47600.0, "peruntukan": "SEEP", "noRujukan": "SMKSONG2.100-15/2(11)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "DARO", "sekolah": "SMK MATU", "tarikh": "27/04/2026", "kelulusan": 47960.0, "peruntukan": "SEEP", "noRujukan": "SMKM.400-5/2/1(6)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "BAU", "sekolah": "SMK SINGAI", "tarikh": "27/04/2026", "kelulusan": 47600.0, "peruntukan": "SEEP", "noRujukan": "SMKS.600-4/3/1/JLD.1(21)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "BAU", "sekolah": "SMK BAU", "tarikh": "27/04/2026", "kelulusan": 47600.0, "peruntukan": "SEEP", "noRujukan": "SMKBAU.300-2/23", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "SELANGAU", "sekolah": "SMK ULU BALINGIAN", "tarikh": "27/04/2026", "kelulusan": 45200.0, "peruntukan": "SEEP", "noRujukan": "SMKUB.300-1/2/1(02)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "MERADONG", "sekolah": "SMK BANDAR BINTANGOR", "tarikh": "27/04/2026", "kelulusan": 47600.0, "peruntukan": "SEEP", "noRujukan": "SMKBB.300-1/2/1(1)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "MUKAH", "sekolah": "SMK THREE RIVERS", "tarikh": "27/04/2026", "kelulusan": 47960.0, "peruntukan": "SEEP", "noRujukan": "SMKTR.400-5/2/1()", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "KANOWIT", "sekolah": "SMK NANGA DAP", "tarikh": "27/04/2026", "kelulusan": 47680.0, "peruntukan": "SEEP", "noRujukan": "SMKND.300-2/1/2(1)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "KUCHING", "sekolah": "SMK SERI SETIA", "tarikh": "27/04/2026", "kelulusan": 2200.0, "peruntukan": "PCG-LPBT/LPK", "noRujukan": "SMKSS.300-2/2/2(05)", "alatan": "TERMINAL PENGIMBAS KEHADIRAN", "kuantiti": 1}, {"ppd": "BARAM", "sekolah": "SMK TINJAR", "tarikh": "27/04/2026", "kelulusan": 47960.0, "peruntukan": "SEEP", "noRujukan": "SMKT.300-2/1/2(01)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "TATAU/SEBAUH", "sekolah": "SMK TATAU", "tarikh": "27/04/2026", "kelulusan": 48000.0, "peruntukan": "SEEP", "noRujukan": "SMK.300-2/1/2(27)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "BARAM", "sekolah": "SMK MARUDI", "tarikh": "27/04/2026", "kelulusan": 47960.0, "peruntukan": "SEEP", "noRujukan": "SMKM.300-2/1/2(03)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "SARIKEI", "sekolah": "SMK SG PAOH", "tarikh": "27/04/2026", "kelulusan": 47600.0, "peruntukan": "SEEP", "noRujukan": "SMKSP.300-2/1/1/2()", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "LUBOK ANTU", "sekolah": "SMK LUBIK ANTU", "tarikh": "27/04/2026", "kelulusan": 47960.0, "peruntukan": "SEEP", "noRujukan": "SMKLA.600-5/1/2", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "MIRI", "sekolah": "SMK DATO PERMAISURI", "tarikh": "27/04/2026", "kelulusan": 47680.0, "peruntukan": "SEEP", "noRujukan": "SMKDP.600-5/1/37(01)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "MIRI", "sekolah": "SM SAINS MIRI", "tarikh": "27/04/2026", "kelulusan": 47680.0, "peruntukan": "SEEP", "noRujukan": "SAINSRI.300-2/1/1Jld.2(14)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "LIMBANG", "sekolah": "SMK KUBONG", "tarikh": "27/04/2026", "kelulusan": 47960.0, "peruntukan": "SEEP", "noRujukan": "SMKK.300-2/1/2(05)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "SARATOK", "sekolah": "SMK SARATOK", "tarikh": "27/04/2026", "kelulusan": 47600.0, "peruntukan": "SEEP", "noRujukan": "SMKS.300-2/2/3(36)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "SAMARAHAN", "sekolah": "SK PENDIDIKAN KHAS SAMARAHAN", "tarikh": "27/04/2026", "kelulusan": 4400.0, "peruntukan": "BMA", "noRujukan": "SKPKKS.300-2/1/2(20)", "alatan": "KOMPUTER MEJA", "kuantiti": 2}, {"ppd": "SAMARAHAN", "sekolah": "SK PENDIDIKAN KHAS SAMARAHAN", "tarikh": "27/04/2026", "kelulusan": 599.0, "peruntukan": "BMA", "noRujukan": "SKPKKS.300-2/1/2(20)", "alatan": "PRINTER", "kuantiti": 1}, {"ppd": "BINTULU", "sekolah": "SMK BINTULU", "tarikh": "27/04/2026", "kelulusan": 47960.0, "peruntukan": "SEEP", "noRujukan": "SMKBTU.300-2/2/2()", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "PADAWAN", "sekolah": "SMK SRI MATANG", "tarikh": "27/04/2026", "kelulusan": 47600.0, "peruntukan": "SEEP", "noRujukan": "SMKSM.300-2/1/2(18)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "PADAWAN", "sekolah": "SM SAINS KUCHING UTARA", "tarikh": "27/04/2026", "kelulusan": 47600.0, "peruntukan": "SEEP", "noRujukan": "SAKURA.300-2/1/2(25)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "MIRI", "sekolah": "SMK LUTONG", "tarikh": "27/04/2026", "kelulusan": 47560.0, "peruntukan": "SEEP", "noRujukan": "SMKLM.400-5/2/Jld.01(01)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "SAMARAHAN", "sekolah": "SMK SADONG JAYA", "tarikh": "18/05/2026", "kelulusan": 47680.0, "peruntukan": "SEEP", "noRujukan": "SMKSJ.400-5/4/2()", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "SIBU", "sekolah": "SMK ROSLI DHOBY", "tarikh": "18/05/2026", "kelulusan": 47680.0, "peruntukan": "SEEP", "noRujukan": "SMKRD.300-2/1/2(01)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "DALAT", "sekolah": "SMK OYA", "tarikh": "18/05/2026", "kelulusan": 47960.0, "peruntukan": "SEEP", "noRujukan": "SMKO.300-2/1/2(03)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "BELAGA", "sekolah": "SMK BELAGA", "tarikh": "18/05/2026", "kelulusan": 48000.0, "peruntukan": "SEEP", "noRujukan": "SMKBEL.300-2/1/2(1)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "KUCHING", "sekolah": "SMK TUN ABANG HAJI OPENG", "tarikh": "18/05/2026", "kelulusan": 47600.0, "peruntukan": "SEEP", "noRujukan": "SMKTAHO.700-4/1/1/Jld.2(56)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "BAU", "sekolah": "SMK BAU", "tarikh": "18/05/2026", "kelulusan": 2069.0, "peruntukan": "PCG-LPBT/LPK", "noRujukan": "SMKBAU.300-2/2/3", "alatan": "KOMPUTER MEJA", "kuantiti": 1}, {"ppd": "BAU", "sekolah": "SMK BAU", "tarikh": "18/05/2026", "kelulusan": 1497.0, "peruntukan": "PCG-LPBT(PKI)", "noRujukan": "SMKBAU.300-2/2/3", "alatan": "PRINTER", "kuantiti": 3}, {"ppd": "BAU", "sekolah": "SMK BAU", "tarikh": "18/05/2026", "kelulusan": 960.0, "peruntukan": "PCG-GEOGRAFI", "noRujukan": "SMKBAU.300-2/2/3", "alatan": "PRINTER", "kuantiti": 2}, {"ppd": "BAU", "sekolah": "SMK BAU", "tarikh": "18/05/2026", "kelulusan": 960.0, "peruntukan": "PCG-MORAL", "noRujukan": "SMKBAU.300-2/2/3", "alatan": "PRINTER", "kuantiti": 2}, {"ppd": "BETONG", "sekolah": "SMK ULU LAYAR", "tarikh": "18/05/2026", "kelulusan": 47960.0, "peruntukan": "SEEP", "noRujukan": "SMKULBET.100-13/1/4(1)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "BETONG", "sekolah": "SMK ST AUGUSTINE", "tarikh": "18/05/2026", "kelulusan": 47960.0, "peruntukan": "SEEP", "noRujukan": "SMKSTABET.660.8.2.1()", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "SUBIS", "sekolah": "SMK SUAI", "tarikh": "18/05/2026", "kelulusan": 47600.0, "peruntukan": "SEEP", "noRujukan": "SMKSUAI.100-9/2/2()", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "SUBIS", "sekolah": "SMK SUBIS", "tarikh": "18/05/2026", "kelulusan": 47600.0, "peruntukan": "SEEP", "noRujukan": "SEEP/03/2026", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "BETONG", "sekolah": "SMK DATUK PATINGGI KEDIT", "tarikh": "18/05/2026", "kelulusan": 47960.0, "peruntukan": "SEEP", "noRujukan": "SMKDPKBET.400-3/9/1/Jld.3(4)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "KANOWIT", "sekolah": "SMK KANOWIT", "tarikh": "18/05/2026", "kelulusan": 4027.0, "peruntukan": "P-63", "noRujukan": "SMKK.300-2/1/2(01)", "alatan": "KOMPUTER MEJA", "kuantiti": 1}, {"ppd": "SIMUNJAN", "sekolah": "SMK GEDONG", "tarikh": "18/05/2026", "kelulusan": 47680.0, "peruntukan": "SEEP", "noRujukan": "SMKG.300-2/1/2", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "SERIAN", "sekolah": "SMK PADAWAN", "tarikh": "18/05/2026", "kelulusan": 47200.0, "peruntukan": "SEEP", "noRujukan": "SMKPADAWAN.600-5/1/8()", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "SARATOK", "sekolah": "SMK KALAKA", "tarikh": "18/05/2026", "kelulusan": 47800.0, "peruntukan": "SEEP", "noRujukan": "SMKKR.600-5/1/19(06)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "LIMBANG", "sekolah": "SMK LIMBANG", "tarikh": "18/05/2026", "kelulusan": 47960.0, "peruntukan": "SEEP", "noRujukan": "SMKL.600-51/16(16)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "KANOWIT", "sekolah": "SMK DATUK HAJI ABDUL RAHMAN YAKUB", "tarikh": "18/05/2026", "kelulusan": 47960.0, "peruntukan": "SEEP", "noRujukan": "SMKDHARY.300-2/1/2(05)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "KUCHING", "sekolah": "SM TEKNIK SEJINGKAT", "tarikh": "18/05/2026", "kelulusan": 47600.0, "peruntukan": "SEEP", "noRujukan": "SMTS.700-4/4/2(2)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "KUCHING", "sekolah": "KOLEJ DATU PATINGGI ABANG HAJI ABDILLAH", "tarikh": "18/05/2026", "kelulusan": 47960.0, "peruntukan": "SEEP", "noRujukan": "KDPAHA.400-2/1/4Jld.2(51)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "MUKAH", "sekolah": "SMK AGAMA IGAN", "tarikh": "18/05/2026", "kelulusan": 47960.0, "peruntukan": "SEEP", "noRujukan": "SMKAI.400-5/4/1()", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "BAU", "sekolah": "SMK LAKE", "tarikh": "18/05/2026", "kelulusan": 48000.0, "peruntukan": "SEEP", "noRujukan": "SMKLAKE.400-5/4/2", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "SAMARAHAN", "sekolah": "SMK HAJJAH LAILA TAIB", "tarikh": "18/05/2026", "kelulusan": 47600.0, "peruntukan": "SEEP", "noRujukan": "SMKA11.400-2/3/1(01)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "MIRI", "sekolah": "SK PENDIDIKAN KHAS MIRI", "tarikh": "18/05/2026", "kelulusan": 4000.0, "peruntukan": "P-63", "noRujukan": "SKPKM.300-2/1/2(16)", "alatan": "KOMPUTER MEJA", "kuantiti": 1}, {"ppd": "PADAWAN", "sekolah": "SMKPENRISSEN", "tarikh": "18/05/2026", "kelulusan": 48000.0, "peruntukan": "SEEP", "noRujukan": "SMKPEN.600-5/1/5(56)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "SIBU", "sekolah": "SMK BAWANG ASSAN", "tarikh": "18/05/2026", "kelulusan": 47960.0, "peruntukan": "SEEP", "noRujukan": "SMKBA.400-5/2/1()", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "LUNDU", "sekolah": "SMK SENIBONG", "tarikh": "15/06/2026", "kelulusan": 47680.0, "peruntukan": "SEEP", "noRujukan": "SMKSGLUN.600-6/1/2(02)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "SIBU", "sekolah": "SMK DURIN", "tarikh": "15/06/2026", "kelulusan": 47960.0, "peruntukan": "SEEP", "noRujukan": "SMKDR.400-5/2/1Jld.3(8)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "SIBU", "sekolah": "SMK JALAN OYA", "tarikh": "15/06/2026", "kelulusan": 47680.0, "peruntukan": "SEEP", "noRujukan": "SMKJO.300-2/1/2(1)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "BELAGA", "sekolah": "SMK BAKUN", "tarikh": "15/06/2026", "kelulusan": 48000.0, "peruntukan": "SEEP", "noRujukan": "SMKBKN.600-5/1/19(1)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "BETONG", "sekolah": "SMK SPAOH", "tarikh": "15/06/2026", "kelulusan": 47680.0, "peruntukan": "SEEP", "noRujukan": "SMKSPH.400-2/1/2()", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "LUNDU", "sekolah": "SMK SEMATAN", "tarikh": "15/06/2026", "kelulusan": 47600.0, "peruntukan": "SEEP", "noRujukan": "SMKSLun.300-2/1/2()", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "DARO", "sekolah": "SMK SEMOP", "tarikh": "15/06/2026", "kelulusan": 47960.0, "peruntukan": "SEEP", "noRujukan": "SMKSD.300-2/1/2(02)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "SERIAN", "sekolah": "SMK SIBURAN", "tarikh": "15/06/2026", "kelulusan": 47680.0, "peruntukan": "SEEP", "noRujukan": "SMKS.300-2/1/2(10)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "LAWAS", "sekolah": "SMK SUNDAR", "tarikh": "15/06/2026", "kelulusan": 48000.0, "peruntukan": "SEEP", "noRujukan": "SMKS.700-4/1/7(18)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "LAWAS", "sekolah": "SMK TRUSAN", "tarikh": "15/06/2026", "kelulusan": 47600.0, "peruntukan": "SEEP", "noRujukan": "SMKT.600-5/1/24(01)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "SERIAN", "sekolah": "SMK TUN ABDUL RAZAK", "tarikh": "15/06/2026", "kelulusan": 47600.0, "peruntukan": "SEEP", "noRujukan": "SMKTAR.600-3/2/24(19)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "KANOWIT", "sekolah": "SMK KANOWIT", "tarikh": "15/06/2026", "kelulusan": 47680.0, "peruntukan": "SEEP", "noRujukan": "SMKK.300-2/1/2(13)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "SERIAN", "sekolah": "SMK TEBAKANG", "tarikh": "15/06/2026", "kelulusan": 47960.0, "peruntukan": "SEEP", "noRujukan": "SMKTBK.PAK.300-2/1/2(04)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "SIBU", "sekolah": "SJKC KWONG KOK", "tarikh": "15/06/2026", "kelulusan": 1100.0, "peruntukan": "PCG-LPBT/PSS", "noRujukan": "SJKKWK.300-2/1/1(8)", "alatan": "SISTEM AUTOMASI PUSAT SUMBER", "kuantiti": 1}, {"ppd": "SIMUNJAN", "sekolah": "SMK SIMUNJAN NO.1", "tarikh": "15/06/2026", "kelulusan": 48000.0, "peruntukan": "SEEP", "noRujukan": "SMKS1/300-2/1/2(3)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "KAPIT", "sekolah": "SMK KAPIT", "tarikh": "15/06/2026", "kelulusan": 48000.0, "peruntukan": "SEEP", "noRujukan": "SMKK.300-2/1/2(2)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "KAPIT", "sekolah": "SMK KAPIT NO.2", "tarikh": "15/06/2026", "kelulusan": 47960.0, "peruntukan": "SEEP", "noRujukan": "SMKKii/400-1/4/1(01)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "KAPIT", "sekolah": "SMK BALLEH", "tarikh": "15/06/2026", "kelulusan": 48000.0, "peruntukan": "SEEP", "noRujukan": "SMKB.500-04/03/03()", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "KAPIT", "sekolah": "SMK SELIRIK", "tarikh": "15/06/2026", "kelulusan": 47680.0, "peruntukan": "SEEP", "noRujukan": "SMKS/400-1/3/6()", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "LUNDU", "sekolah": "SMK LUNDU", "tarikh": "15/06/2026", "kelulusan": 47400.0, "peruntukan": "SEEP", "noRujukan": "SMKLUN.300-3/1/2(04)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "MIRI", "sekolah": "SMK RIAM", "tarikh": "15/06/2026", "kelulusan": 35700.0, "peruntukan": "SEEP", "noRujukan": "SMKR.300-2/1/2(3)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 3}, {"ppd": "JULAU", "sekolah": "SMK JULAU NO.2", "tarikh": "15/06/2026", "kelulusan": 48000.0, "peruntukan": "SEEP", "noRujukan": "SMKJ2.300-2/1/2(02)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "MIRI", "sekolah": "KOLEJ TUN DATU TUANKU HAJI BUANG", "tarikh": "15/06/2026", "kelulusan": 47560.0, "peruntukan": "SEEP", "noRujukan": "KTDTHBM.600-5/1/28(09)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "JULAU", "sekolah": "SMK JULAU", "tarikh": "15/06/2026", "kelulusan": 48000.0, "peruntukan": "SEEP", "noRujukan": "SMKJ.300-2/1/1(01)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "SERIAN", "sekolah": "SMK TARAT", "tarikh": "15/06/2026", "kelulusan": 47600.0, "peruntukan": "SEEP", "noRujukan": "SMKTarat.600-5/1/16()", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "KUCHING", "sekolah": "SMK PENDING", "tarikh": "15/06/2026", "kelulusan": 1899.0, "peruntukan": "PCG-LPBT/PSS", "noRujukan": "SMKPENDING.400-2/1/5(28)", "alatan": "TERMINAL PENGIMBAS KEHADIRAN", "kuantiti": 1}, {"ppd": "SRI AMAN", "sekolah": "SMK LINGGA", "tarikh": "19/06/2026", "kelulusan": 47680.0, "peruntukan": "SEEP", "noRujukan": "SMKL300-2/1/2(01)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "SRI AMAN", "sekolah": "SMK SRI AMAN", "tarikh": "19/06/2026", "kelulusan": 47680.0, "peruntukan": "SEEP", "noRujukan": "SMKSA.600-5/1/15()", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "DALAT", "sekolah": "SMK DALAT", "tarikh": "19/06/2026", "kelulusan": 47680.0, "peruntukan": "SEEP", "noRujukan": "SMKD.700-04/03/07(10)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "SAMARAHAN", "sekolah": "SMK ASAJAYA", "tarikh": "19/06/2026", "kelulusan": 47600.0, "peruntukan": "SEEP", "noRujukan": "SMKA.600-5/1/20(13)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "MIRI", "sekolah": "SM SAINS MIRI", "tarikh": "19/06/2026", "kelulusan": 3814.0, "peruntukan": "BMA", "noRujukan": "SAINSRI.300-2/1/1Jld.2(15)", "alatan": "KOMPUTER MEJA", "kuantiti": 1}, {"ppd": "MIRI", "sekolah": "SM SAINS MIRI", "tarikh": "19/06/2026", "kelulusan": 1160.0, "peruntukan": "BMA", "noRujukan": "SAINSRI.300-2/1/1Jld.2(15)", "alatan": "PRINTER", "kuantiti": 2}, {"ppd": "LAWAS", "sekolah": "SMK MERAPOK", "tarikh": "19/06/2026", "kelulusan": 48000.0, "peruntukan": "SEEP", "noRujukan": "SMKM.600-2/2/16(32)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "BARAM", "sekolah": "SMK BARIO", "tarikh": "19/06/2026", "kelulusan": 47960.0, "peruntukan": "SEEP", "noRujukan": "SMKB.700-4/3/15()", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "BARAM", "sekolah": "SMK LONG BEDIAN", "tarikh": "19/06/2026", "kelulusan": 47600.0, "peruntukan": "SEEP", "noRujukan": "SMKLB.300-2/1/2(26)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "BARAM", "sekolah": "SMK LONG LAMA", "tarikh": "19/06/2026", "kelulusan": 47600.0, "peruntukan": "SEEP", "noRujukan": "SMKLL.300-2/1(2)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "BARAM", "sekolah": "SMK TELANG USAN", "tarikh": "19/06/2026", "kelulusan": 48000.0, "peruntukan": "SEEP", "noRujukan": "SMKTU.600-5/1", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "BARAM", "sekolah": "SMK TEMENGGONG DATUK LAWAI JAU", "tarikh": "19/06/2026", "kelulusan": 47960.0, "peruntukan": "SEEP", "noRujukan": "SMKTDLJ.300-2/1/2(01)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "BARAM", "sekolah": "SMK TUTOH APOH", "tarikh": "19/06/2026", "kelulusan": 47680.0, "peruntukan": "SEEP", "noRujukan": "SMKTA.300-2/1/2()", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "SAMARAHAN", "sekolah": "SMK PESANTREEN ABDUL TAIB MAHMUD", "tarikh": "19/06/2026", "kelulusan": 47600.0, "peruntukan": "SEEP", "noRujukan": "SMKPATM.300-2/1/2(6)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "JULAU", "sekolah": "SMK PAKAN", "tarikh": "19/06/2026", "kelulusan": 47680.0, "peruntukan": "SEEP", "noRujukan": "SMKP.300-2/1/2(6)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "SERIAN", "sekolah": "SMK TEBEDU", "tarikh": "19/06/2026", "kelulusan": 47680.0, "peruntukan": "SEEP", "noRujukan": "SMKTBU600-5/1/5(2)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "SAMARAHAN", "sekolah": "SMK MUARA TUANG", "tarikh": "19/06/2026", "kelulusan": 47680.0, "peruntukan": "SEEP", "noRujukan": "SMKMT.400-5/2/1()", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "MARUDI", "sekolah": "SMK MARUDI", "tarikh": "19/06/2026", "kelulusan": 3000.0, "peruntukan": "PCG-PSS", "noRujukan": "SMKM.600-7/1/5(5)", "alatan": "KOMPUTER MEJA", "kuantiti": 1}, {"ppd": "KUCHING", "sekolah": "SMK BANDAR SAMARIANG", "tarikh": "19/06/2026", "kelulusan": 44000.0, "peruntukan": "SEEP", "noRujukan": "SMKBS.300-2/1/2(02)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "KUCHING", "sekolah": "SMK SANTUBONG", "tarikh": "19/06/2026", "kelulusan": 47600.0, "peruntukan": "SEEP", "noRujukan": "SMKSTB.300-2/1/2(02)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "BINTULU", "sekolah": "SMK ASYAKIRIN", "tarikh": "19/06/2026", "kelulusan": 46400.0, "peruntukan": "SEEP", "noRujukan": "SMKAs(BTU).100-9/7/1Jld.6(14)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "SERIAN", "sekolah": "SMK BALAI RINGIN", "tarikh": "19/06/2026", "kelulusan": 47400.0, "peruntukan": "SEEP", "noRujukan": "SMKBR.300-2/1/2(20)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "DALAT", "sekolah": "SMK BATANG IGAN", "tarikh": "19/06/2026", "kelulusan": 48000.0, "peruntukan": "SEEP", "noRujukan": "SMKBI.400-5/2/1(5)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "KUCHING", "sekolah": "SEKOLAH SENI MALAYSIA", "tarikh": "01/07/2026", "kelulusan": 47680.0, "peruntukan": "SEEP", "noRujukan": "SSEMS.300-2/1/2(11)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "SONG", "sekolah": "SMK KATIBAS", "tarikh": "01/07/2026", "kelulusan": 47600.0, "peruntukan": "SEEP", "noRujukan": "SMKK.T.300-2/1/2Jld.1()", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "BAU", "sekolah": "SMK LAKE", "tarikh": "01/07/2026", "kelulusan": 809.0, "peruntukan": "PCG-SENI VISUAL", "noRujukan": "SMKLAKE.400-5/4/2", "alatan": "PRINTER", "kuantiti": 1}, {"ppd": "MIRI", "sekolah": "SMK PUJUT", "tarikh": "01/07/2026", "kelulusan": 2950.0, "peruntukan": "SUWA", "noRujukan": "SMKP.300-2/1/2/Jld.1(17)", "alatan": "PRINTER", "kuantiti": 2}, {"ppd": "BAU", "sekolah": "SMK PAKU", "tarikh": "01/07/2026", "kelulusan": 47600.0, "peruntukan": "SEEP", "noRujukan": "SMKPAKU.300-2/2/2/26(02)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "SIBU", "sekolah": "SK PENDIDIKAN KHAS SIBU", "tarikh": "01/07/2026", "kelulusan": 3000.0, "peruntukan": "OS35000", "noRujukan": "SKPKS.100-15/5(53)", "alatan": "PRINTER A3", "kuantiti": 1}, {"ppd": "SIBU", "sekolah": "SK PENDIDIKAN KHAS SIBU", "tarikh": "01/07/2026", "kelulusan": 1000.0, "peruntukan": "OS35000", "noRujukan": "SKPKS.100-15/5(53)", "alatan": "PRINTER A4", "kuantiti": 1}, {"ppd": "LAWAS", "sekolah": "SMK LAWAS", "tarikh": "01/07/2026", "kelulusan": 48000.0, "peruntukan": "SEEP", "noRujukan": "SMKL.400-3/3/1()", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "TATAU/SEBAUH", "sekolah": "SMK SEBAUH", "tarikh": "01/07/2026", "kelulusan": 47960.0, "peruntukan": "SEEP", "noRujukan": "SMKS.300-2/1/2(01)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "SUBIS", "sekolah": "SMK LUAR BANDAR MIRI", "tarikh": "01/07/2026", "kelulusan": 47960.0, "peruntukan": "SEEP", "noRujukan": "SMKLBM.400-5/2/1()", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "KUCHING", "sekolah": "SMK DATUK PATINGGI HJ ABDUL GAPOR", "tarikh": "01/07/2026", "kelulusan": 46000.0, "peruntukan": "SEEP", "noRujukan": "SMKDPHAG.300-2/1/2(7)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 4}, {"ppd": "SAMARAHAN", "sekolah": "SMK WIRA PENRISSEN", "tarikh": "13/07/2026", "kelulusan": 898.0, "peruntukan": "PCG-LPBT/LPK", "noRujukan": "SMKWP.300-2/1/2(13)", "alatan": "PRINTER", "kuantiti": 2}, {"ppd": "SAMARAHAN", "sekolah": "SMK WIRA PENRISSEN", "tarikh": "13/07/2026", "kelulusan": 449.0, "peruntukan": "PCG-P.SENI", "noRujukan": "SMKWP.300-2/1/2(13)", "alatan": "PRINTER", "kuantiti": 1}, {"ppd": "SAMARAHAN", "sekolah": "SMK WIRA PENRISSEN", "tarikh": "13/07/2026", "kelulusan": 449.0, "peruntukan": "PCG-P.MORAL", "noRujukan": "SMKWP.300-2/1/2(13)", "alatan": "PRINTER", "kuantiti": 1}, {"ppd": "SAMARAHAN", "sekolah": "SMK WIRA PENRISSEN", "tarikh": "13/07/2026", "kelulusan": 449.0, "peruntukan": "PCG-P.KESIHATAN", "noRujukan": "SMKWP.300-2/1/2(13)", "alatan": "PRINTER", "kuantiti": 1}, {"ppd": "SAMARAHAN", "sekolah": "SMK WIRA PENRISSEN", "tarikh": "13/07/2026", "kelulusan": 449.0, "peruntukan": "PCG-GEOGRAFI", "noRujukan": "SMKWP.300-2/1/2(13)", "alatan": "PRINTER", "kuantiti": 1}, {"ppd": "SAMARAHAN", "sekolah": "SMK WIRA PENRISSEN", "tarikh": "13/07/2026", "kelulusan": 449.0, "peruntukan": "PCG-FIZIK", "noRujukan": "SMKWP.300-2/1/2(13)", "alatan": "PRINTER", "kuantiti": 1}, {"ppd": "SAMARAHAN", "sekolah": "SMK WIRA PENRISSEN", "tarikh": "13/07/2026", "kelulusan": 449.0, "peruntukan": "PCG-SAINS", "noRujukan": "SMKWP.300-2/1/2(13)", "alatan": "PRINTER", "kuantiti": 1}, {"ppd": "SAMARAHAN", "sekolah": "SMK WIRA PENRISSEN", "tarikh": "13/07/2026", "kelulusan": 449.0, "peruntukan": "PCG-SAINS KOMPUTER", "noRujukan": "SMKWP.300-2/1/2(13)", "alatan": "PRINTER", "kuantiti": 1}, {"ppd": "TATAU/SEBAUH", "sekolah": "SK TATAU", "tarikh": "13/07/2026", "kelulusan": 790.0, "peruntukan": "PCG-PSS", "noRujukan": "SK.600-7/1/5", "alatan": "SISTEM AUTOMASI PUSAT SUMBER", "kuantiti": 1}, {"ppd": "LIMBANG", "sekolah": "SMK MEDAMIT", "tarikh": "13/07/2026", "kelulusan": 48000.0, "peruntukan": "SEEP", "noRujukan": "SMKM.400-5/2/1(5)", "alatan": "INTERACTIVE SMARTBOARD (ISB)", "kuantiti": 6}];
+
+        let chartPPDInstance = null;
+        let chartAlatanInstance = null;
+
+        let allPPDs = [];
+        let allSekolahs = [];
+        let allAlatans = [];
+
+        // Palet warna Pastel & Dark Blue yang elegan untuk Carta Bar & Pie
+        const elegantPastelDarkBluePalette = [
+            '#1e3a8a', // Dark Blue
+            '#3b82f6', // Bright Blue
+            '#60a5fa', // Soft Blue
+            '#93c5fd', // Light Blue Pastel
+            '#0f766e', // Teal Dark
+            '#14b8a6', // Teal Pastel
+            '#6366f1', // Indigo
+            '#a5b4fc', // Indigo Pastel
+            '#475569', // Slate Dark
+            '#94a3b8'  // Slate Pastel
+        ];
+
+        function enterDashboard() {
+            document.getElementById('landingPage').classList.add('opacity-0');
+            setTimeout(() => {
+                document.getElementById('landingPage').classList.add('hidden');
+                document.getElementById('dashboardPage').classList.remove('hidden');
+                setTimeout(() => document.getElementById('dashboardPage').classList.remove('opacity-0'), 50);
+            }, 500);
+        }
+
+        function returnToLanding() {
+            document.getElementById('dashboardPage').classList.add('opacity-0');
+            setTimeout(() => {
+                document.getElementById('dashboardPage').classList.add('hidden');
+                document.getElementById('landingPage').classList.remove('hidden');
+                setTimeout(() => document.getElementById('landingPage').classList.remove('opacity-0'), 50);
+            }, 500);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initMasterLists();
+            renderCheckboxes('ppd', allPPDs);
+            renderCheckboxes('sekolah', allSekolahs);
+            renderCheckboxes('alatan', allAlatans);
+            onPPDSelectionChange();
+
+            document.addEventListener('click', (e) => {
+                ['ppd', 'sekolah', 'alatan'].forEach(type => {
+                    const btn = document.getElementById(`${type}Btn`);
+                    const menu = document.getElementById(`${type}Menu`);
+                    if (btn && menu && !btn.contains(e.target) && !menu.contains(e.target)) {
+                        menu.classList.add('hidden');
+                    }
+                });
+            });
+        });
+
+        function initMasterLists() {
+            allPPDs = [...new Set(rawData.map(d => d.ppd))].sort();
+            allSekolahs = [...new Set(rawData.map(d => d.sekolah))].sort();
+            allAlatans = [...new Set(rawData.map(d => d.alatan))].filter(Boolean).sort();
+        }
+
+        function toggleDropdown(id) {
+            const menu = document.getElementById(id);
+            const isHidden = menu.classList.contains('hidden');
+            ['ppdMenu', 'sekolahMenu', 'alatanMenu'].forEach(m => {
+                const el = document.getElementById(m);
+                if (el) el.classList.add('hidden');
+            });
+            if (isHidden) menu.classList.remove('hidden');
+        }
+
+        function renderCheckboxes(type, items, checkedList = null) {
+            const container = document.getElementById(`${type}List`);
+            if (!container) return;
+            container.innerHTML = '';
+
+            items.forEach(item => {
+                const isChecked = checkedList ? checkedList.includes(item) : true;
+                const label = document.createElement('label');
+                label.className = 'flex items-center space-x-3 text-xs text-slate-700 hover:text-black cursor-pointer py-1 px-2 hover:bg-slate-100 rounded item-row';
+                label.setAttribute('data-name', item.toLowerCase());
+                label.innerHTML = `
+                    <input type="checkbox" value="${item}" ${isChecked ? 'checked' : ''} onchange="onManualSelectionChange('${type}')" class="custom-checkbox w-4 h-4 rounded">
+                    <span class="truncate">${item}</span>
+                `;
+                container.appendChild(label);
+            });
+        }
+
+        function getSelectedValues(type) {
+            const checkboxes = document.querySelectorAll(`#${type}List input[type="checkbox"]:checked`);
+            return Array.from(checkboxes).map(cb => cb.value);
+        }
+
+        function selectAll(type, status) {
+            const checkboxes = document.querySelectorAll(`#${type}List input[type="checkbox"]`);
+            checkboxes.forEach(cb => cb.checked = status);
+            if(type === 'ppd') {
+                onPPDSelectionChange();
+            } else {
+                applyAllFilters();
+            }
+        }
+
+        function filterList(type) {
+            const query = document.getElementById(`${type}Search`).value.toLowerCase();
+            const rows = document.querySelectorAll(`#${type}List .item-row`);
+            rows.forEach(row => {
+                const name = row.getAttribute('data-name');
+                if (name.includes(query)) {
+                    row.classList.remove('hidden');
+                } else {
+                    row.classList.add('hidden');
+                }
+            });
+        }
+
+        function onPPDSelectionChange() {
+            const selectedPPDs = getSelectedValues('ppd');
+            const availableSekolahs = [...new Set(rawData.filter(d => selectedPPDs.includes(d.ppd)).map(d => d.sekolah))].sort();
+            renderCheckboxes('sekolah', availableSekolahs, availableSekolahs);
+
+            const availableAlatans = [...new Set(rawData.filter(d => selectedPPDs.includes(d.ppd)).map(d => d.alatan))].filter(Boolean).sort();
+            const currentAlatanSelections = getSelectedValues('alatan');
+            renderCheckboxes('alatan', availableAlatans, currentAlatanSelections.length ? currentAlatanSelections : availableAlatans);
+
+            updateButtonLabels();
+            applyAllFilters();
+        }
+
+        function onManualSelectionChange(type) {
+            if(type === 'ppd') {
+                onPPDSelectionChange();
+            } else {
+                updateButtonLabels();
+                applyAllFilters();
+            }
+        }
+
+        function updateButtonLabels() {
+            const selectedPPDs = getSelectedValues('ppd');
+            const selectedSekolahs = getSelectedValues('sekolah');
+            const totalSekolahs = document.querySelectorAll('#sekolahList input[type="checkbox"]').length;
+            const selectedAlatans = getSelectedValues('alatan');
+            const totalAlatans = document.querySelectorAll('#alatanList input[type="checkbox"]').length;
+
+            document.getElementById('ppdBtnText').textContent = selectedPPDs.length === allPPDs.length ? 'Semua PPD Dipilih' : `${selectedPPDs.length} PPD Dipilih`;
+            document.getElementById('sekolahBtnText').textContent = (selectedSekolahs.length === totalSekolahs && totalSekolahs > 0) ? 'Semua Sekolah Dipilih' : `${selectedSekolahs.length} Sekolah Dipilih`;
+            document.getElementById('alatanBtnText').textContent = (selectedAlatans.length === totalAlatans && totalAlatans > 0) ? 'Semua Peralatan Dipilih' : `${selectedAlatans.length} Alatan Dipilih`;
+        }
+
+        function applyAllFilters() {
+            const selectedPPDs = getSelectedValues('ppd');
+            const selectedSekolahs = getSelectedValues('sekolah');
+            const selectedAlatans = getSelectedValues('alatan');
+
+            const filteredData = rawData.filter(item => {
+                return selectedPPDs.includes(item.ppd) && 
+                       selectedSekolahs.includes(item.sekolah) && 
+                       selectedAlatans.includes(item.alatan);
+            });
+
+            updateKPIs(filteredData, selectedPPDs);
+            updateCharts(filteredData);
+            updateTable(filteredData);
+        }
+
+        function resetFilters() {
+            renderCheckboxes('ppd', allPPDs, allPPDs);
+            renderCheckboxes('sekolah', allSekolahs, allSekolahs);
+            renderCheckboxes('alatan', allAlatans, allAlatans);
+            
+            ['ppd', 'sekolah', 'alatan'].forEach(type => {
+                const searchInput = document.getElementById(`${type}Search`);
+                if (searchInput) {
+                    searchInput.value = '';
+                    filterList(type);
+                }
+            });
+
+            updateButtonLabels();
+            applyAllFilters();
+        }
+
+        function updateKPIs(data, selectedPPDs) {
+            const totalKelulusan = data.reduce((sum, d) => sum + d.kelulusan, 0);
+            const totalKuantiti = data.reduce((sum, d) => sum + d.kuantiti, 0);
+
+            document.getElementById('kpiJumlahKelulusan').textContent = 'RM ' + totalKelulusan.toLocaleString('ms-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            document.getElementById('kpiJumlahPermohonan').textContent = data.length;
+            document.getElementById('kpiJumlahKuantiti').textContent = totalKuantiti.toLocaleString('ms-MY') + ' Unit';
+            document.getElementById('kpiJumlahPPD').textContent = selectedPPDs.length;
+        }
+
+        function updateCharts(data) {
+            const ppdGroup = {};
+            data.forEach(d => ppdGroup[d.ppd] = (ppdGroup[d.ppd] || 0) + d.kelulusan);
+            const sortedPPD = Object.entries(ppdGroup).sort((a,b) => b[1] - a[1]);
+
+            const alatanGroup = {};
+            data.forEach(d => { if (d.alatan) alatanGroup[d.alatan] = (alatanGroup[d.alatan] || 0) + d.kuantiti; });
+            const sortedAlatan = Object.entries(alatanGroup).sort((a,b) => b[1] - a[1]);
+
+            if (chartPPDInstance) chartPPDInstance.destroy();
+            chartPPDInstance = new Chart(document.getElementById('chartPPD').getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: sortedPPD.map(i => i[0]),
+                    datasets: [{
+                        label: 'Jumlah Kelulusan (RM)',
+                        data: sortedPPD.map(i => i[1]),
+                        // Menjadikan setiap bar mempunyai warna berlainan daripada palet pastel & dark blue
+                        backgroundColor: sortedPPD.map((_, index) => elegantPastelDarkBluePalette[index % elegantPastelDarkBluePalette.length]),
+                        borderWidth: 1,
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { ticks: { color: '#64748b', font: { size: 10 } }, grid: { display: false } },
+                        y: { ticks: { color: '#64748b', font: { size: 10 } }, grid: { color: 'rgba(0,0,0,0.05)' } }
+                    },
+                    onClick: (event, elements) => {
+                        if (elements.length > 0) {
+                            const index = elements[0].index;
+                            const clickedPPD = sortedPPD[index][0];
+
+                            renderCheckboxes('ppd', allPPDs, [clickedPPD]);
+                            const targetSekolahs = [...new Set(rawData.filter(d => d.ppd === clickedPPD).map(d => d.sekolah))];
+                            renderCheckboxes('sekolah', targetSekolahs, targetSekolahs);
+                            updateButtonLabels();
+                            applyAllFilters();
+                        }
+                    }
+                }
+            });
+
+            if (chartAlatanInstance) chartAlatanInstance.destroy();
+            chartAlatanInstance = new Chart(document.getElementById('chartAlatan').getContext('2d'), {
+                type: 'pie',
+                data: {
+                    labels: sortedAlatan.map(i => i[0]),
+                    datasets: [{
+                        data: sortedAlatan.map(i => i[1]),
+                        // Warna berlainan untuk setiap pecahan carta pai
+                        backgroundColor: elegantPastelDarkBluePalette.slice(0, sortedAlatan.length)
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'right', labels: { color: '#334155', font: { size: 10 } } }
+                    },
+                    onClick: (event, elements) => {
+                        if (elements.length > 0) {
+                            const index = elements[0].index;
+                            const clickedAlatan = sortedAlatan[index][0];
+
+                            const relevantRows = rawData.filter(d => d.alatan === clickedAlatan);
+                            const targetPPDs = [...new Set(relevantRows.map(d => d.ppd))];
+                            const targetSekolahs = [...new Set(relevantRows.map(d => d.sekolah))];
+
+                            renderCheckboxes('ppd', allPPDs, targetPPDs);
+                            const availableSekolahs = [...new Set(rawData.filter(d => targetPPDs.includes(d.ppd)).map(d => d.sekolah))].sort();
+                            renderCheckboxes('sekolah', availableSekolahs, targetSekolahs);
+                            renderCheckboxes('alatan', allAlatans, [clickedAlatan]);
+
+                            updateButtonLabels();
+                            applyAllFilters();
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateTable(data) {
+            const tbody = document.getElementById('tableBody');
+            document.getElementById('recordCount').textContent = data.length;
+            tbody.innerHTML = '';
+
+            if (data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="9" class="p-6 text-center text-slate-400 font-medium">Tiada rekod dijumpai bagi penapis yang dipilih.</td></tr>`;
+                return;
+            }
+
+            data.forEach((row, index) => {
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-slate-50 transition-colors';
+                tr.innerHTML = `
+                    <td class="p-3 text-center text-slate-500 font-mono">${index + 1}</td>
+                    <td class="p-3 font-semibold text-amber-700">${row.ppd}</td>
+                    <td class="p-3 font-medium text-slate-900">${row.sekolah}</td>
+                    <td class="p-3 text-slate-500 font-mono">${row.tarikh || '-'}</td>
+                    <td class="p-3 text-slate-700 font-medium">${row.alatan || '-'}</td>
+                    <td class="p-3 text-center font-bold text-slate-900">${row.kuantiti}</td>
+                    <td class="p-3 text-right font-mono font-semibold gold-accent">RM ${row.kelulusan.toLocaleString('ms-MY', { minimumFractionDigits: 2 })}</td>
+                    <td class="p-3 text-slate-500">${row.peruntukan || '-'}</td>
+                    <td class="p-3 text-slate-500 font-mono text-[11px]">${row.noRujukan || '-'}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+    </script>
+</body>
+</html>
